@@ -1,0 +1,14 @@
+// Author : ©shahriarahnaf
+//@version=5
+// TEST ALL SCRIPTS FOR PERIOD AND ASSET WHERE IT IS USEFUL 
+// THIS IS NOT FINANCIAL ADVICE USE AT OWN RISK
+
+strategy("My strategy", overlay=true, margin_long=1000, margin_short=10)
+
+longCondition = ta.crossover(ta.sma(close, 3), ta.sma(close, 10)) and open < high[1]
+if (longCondition)
+    strategy.entry("My Long Entry Id", strategy.long)
+
+shortCondition = ta.crossunder(ta.sma(close, 3), ta.sma(close, 10))
+if (shortCondition)
+    strategy.entry("My Short Entry Id", strategy.short)
