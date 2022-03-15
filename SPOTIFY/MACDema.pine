@@ -1,0 +1,18 @@
+//@version=5
+strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD)
+fastLength = input(11)
+slowLength = input(14)
+MACDLength = input(9)
+MACD = ta.ema(close, fastLength) - ta.ema(close, slowLength)
+aMACD = ta.ema(MACD, MACDLength)
+delta = MACD - aMACD // difference 
+
+[macdLine, signalLine, histMacd] = ta.macd(close, fastLength, slowLength, MACDLength)
+plot(macdhist, style = plot.styple.columns, color = macdhist >=0 0 ? color.green : color.red) // plot the bars
+plot(signalline, color = color.blue)
+plot(macdline, color = color.pink)
+
+if (ta.crossover(delta, 0))
+	strategy.entry("MacdLE", strategy.long, comment="MacdLE")
+if (ta.crossunder(delta, 0))
+	strategy.entry("MacdSE", strategy.short, comment="MacdSE")
