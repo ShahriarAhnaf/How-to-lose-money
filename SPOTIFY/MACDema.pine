@@ -1,18 +1,22 @@
 //@version=5
-strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD)
+strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=1000)
 fastLength = input(11)
 slowLength = input(14)
 MACDLength = input(9)
+
+testing_start_date = input.time(title="Date", defval=timestamp("20 Feb 2020 00:00 +0300"))
+
 MACD = ta.ema(close, fastLength) - ta.ema(close, slowLength)
 aMACD = ta.ema(MACD, MACDLength)
 delta = MACD - aMACD // difference 
-
+    
 [macdLine, signalLine, histMACD] = ta.macd(close, fastLength, slowLength, MACDLength)
 plot(histMACD, style = plot.style_columns, color = histMACD >=0 ? color.green : color.red) // plot the bars
 plot(signalLine, color = color.blue)
 plot(macdLine, color = color.orange)
-
-if (ta.crossover(delta, 0))
-	strategy.entry("MacdLE", strategy.long, comment="to the moon! /^")
-if (ta.crossunder(delta, 0))
-	strategy.entry("MacdSE", strategy.short, comment="le sell ?!")
+    
+if (time > testing_start_date)    
+    if (ta.crossover(delta, 0))
+    	strategy.entry("MacdLE", strategy.long, comment="to the moon! /^")
+    if (ta.crossunder(delta, 0))
+    	strategy.entry("MacdSE", strategy.short, comment="le sell ?!")
