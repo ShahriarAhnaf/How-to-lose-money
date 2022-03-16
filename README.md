@@ -7,5 +7,11 @@ Always test your strategies on the asset and time period that it can be applicab
 
 CURRENT GOAL!
 optimize CANADIAN STOCKS!
-- SPOTIFY!
+~~- SPOTIFY!~~
 - BlackBerry!
+
+MERICA!!!
+- GOOGLE
+- AMD
+~~- NIO~~
+- 
