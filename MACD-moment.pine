@@ -1,15 +1,48 @@
-//@version=30
-strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=200)
+//@version=5
+// author : le Ahnaf shahriar
+strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=1000, default_qty_type=strategy.percent_of_equity, default_qty_value=80, pyramiding=3)
+
+ma(source, length, type) =>
+    switch type
+        "SMA" => ta.sma(source, length)
+        "EMA" => ta.ema(source, length)
+        "SMMA (RMA)" => ta.rma(source, length)
+
 
 fastLength = input(11)
 slowLength = input(14)
 MACDLength = input(9)
+rsiLength = input(2)
+
+//bootlegging the rsi CODE!
+
+rsiLengthInput = input.int(14, minval=1, title="RSI Length", group="RSI Settings")
+rsiSourceInput = input.source(close, "Source", group="RSI Settings")
+rsiOversold = input.int(30, title="Rsi Oversold", group="RSI Settings")
+rsiOverbought = input.int(80, title="Rsi Overbought", group="RSI Settings")
+
+maTypeInput = input.string("SMA", title="MA Type", options=["SMA", "Bollinger Bands", "EMA", "SMMA (RMA)", "WMA", "VWMA"], group="MA Settings")
+maLengthInput = input.int(14, title="MA Length", group="MA Settings")
+bbMultInput = input.float(2.0, minval=0.001, maxval=50, title="BB StdDev", group="MA Settings")
+
+up = ta.rma(math.max(ta.change(rsiSourceInput), 0), rsiLengthInput)
+down = ta.rma(-math.min(ta.change(rsiSourceInput), 0), rsiLengthInput)
+rsi = down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down))
+rsiMA = ma(rsi, maLengthInput, maTypeInput)
+
+leRSI_buy_or_sell =0
+if rsiMA > rsiOverbought/100 or rsiMA < rsiOversold/100
+    leRSI_buy_or_sell = rsiMA >= 0.5 ? (rsiOverbought/100) - rsiMA  : rsiMA -  (rsiOversold/100)       
+
+
+
 
 testing_start_date = input.time(title="Date", defval=timestamp("20 January 2022 00:00 +0300"))
 
 MACD = ta.ema(close, fastLength) - ta.ema(close, slowLength)
 aMACD = ta.ema(MACD, MACDLength)
-delta = MACD - aMACD // difference 
+
+delta = MACD - aMACD + leRSI_buy_or_sell // difference
 
     
 [macdLine, signalLine, histMACD] = ta.macd(close, fastLength, slowLength, MACDLength)
@@ -21,4 +54,4 @@ if (time > testing_start_date)
     if (ta.crossover(delta, 0))
     	strategy.entry("MacdLE", strategy.long, comment="to the moon! /^")
     if (ta.crossunder(delta, 0))
-    	strategy.entry("MacdSE", strategy.short, comment="le sell?!")
+    	strategy.entry("MacdSE", strategy.short, comment="le sell ?!")
