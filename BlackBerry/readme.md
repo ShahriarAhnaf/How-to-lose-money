@@ -6,3 +6,4 @@ only 6 trades a month!
 
 rsi weigh 20
 length 10
+27/75
