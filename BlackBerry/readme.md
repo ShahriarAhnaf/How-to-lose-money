@@ -1,6 +1,8 @@
 le settings : 5 50 10
 period : 1h candle
-3.669 profit factor
+6.4 profit factor ! 53% profitable! 
 
-rsi weigh 2
-length 15
+only 6 trades a month!
+
+rsi weigh 20
+length 10
