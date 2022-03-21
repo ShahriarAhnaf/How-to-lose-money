@@ -20,7 +20,7 @@ higher MACD length is safer for overall trading without botting and getting algo
 
 CURRENT GOAL!
 optimize CANADIAN STOCKS!
--~~SPOTIFY!~~
+-~~SHOPIFY!~~
 - BlackBerry!
 
 MERICA!!!
@@ -28,3 +28,4 @@ MERICA!!!
 - AMD
 - ~~NIO~~
 - NVDA
+- LI
