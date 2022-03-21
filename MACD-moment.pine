@@ -42,8 +42,9 @@ if rsiMA >= rsiOverbought/100 or rsiMA <= rsiOversold/100
 
 
 testing_start_date = input.time(title="Date", defval=timestamp("20 January 2022 00:00 +0300"))
-
-MACD = ta.ema(close, fastLength) - ta.ema(close, slowLength)
+fastEMA = ta.ema(close, fastLength)
+slowEMA = ta.ema(close, slowLength)
+MACD = fastEMA - slowEMA
 aMACD = ta.ema(MACD, MACDLength)
 
 delta = MACD - aMACD  + leRSI_buy_or_sell*RSI_factor // difference
@@ -53,6 +54,11 @@ delta = MACD - aMACD  + leRSI_buy_or_sell*RSI_factor // difference
 plot(histMACD, style = plot.style_area, color = histMACD >=0 ? color.green : color.red) // plot the bars
 plot(signalLine, color = color.blue)
 plot(macdLine, color = color.orange)
+
+// the actual emas for analysis from the graphs!
+plot(fastEMA, title="FAST EMA", color=color.pink)
+plot(slowEMA, title="SLOW EMA", color=color.orange)
+
 plot(delta, color = delta >= 0 ? color.yellow : color.purple)
 plot(rsiMA, offset=rsiOffset, color = rsiMA >= 50 ? color.red : color.green)
     
