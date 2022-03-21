@@ -1,14 +1,14 @@
 ALWAYS 2 ticks of SLIPPAGE FOR ERROR CORRECTION!
 
 
-period: 15 m candles 
+period: 1h candles 
 
-    settings : 24 100 10
+    settings : 2 100 10
     
-    rsi: 30/75 50 
+    rsi: 30/73 100 
     
     MA settings: EMA
  
-    LONG profit : 36% 
+    profitablity: 53% only 20 orders a month 
     
     
