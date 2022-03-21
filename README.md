@@ -2,6 +2,11 @@
 A quest to maximize strategy testing returns. The numbers used here are never encourage gambling, but to put strategy to test
 
 
+WEEK OF TESTING CURRENT STRATEGIES!!!!
+
+march 21-march 25
+
+
 Always test your strategies on the asset and time period that it can be applicable to!
 
 
@@ -19,6 +24,8 @@ higher MACD length is safer for overall trading without botting and getting algo
 
 
 CURRENT GOAL!
+ADD TAKE PROFIT AND STOP LOSS FEATURE TO PREVENT MASSIVE SPIKES AND DRAWDOWNS
+
 optimize CANADIAN STOCKS!
 -~~SHOPIFY!~~
 - BlackBerry!
