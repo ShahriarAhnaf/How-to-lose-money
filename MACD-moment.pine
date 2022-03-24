@@ -61,9 +61,13 @@ plot(slowEMA, title="SLOW EMA", color=color.orange)
 
 plot(delta, color = delta >= 0 ? color.yellow : color.purple)
 plot(rsiMA, offset=rsiOffset, color = rsiMA >= 50 ? color.red : color.green)
-    
-if (time > testing_start_date)    
-    if (ta.crossover(delta, 0))
-    	strategy.entry("entry", strategy.long, comment="to the moon!/^")
-    if (ta.crossunder(delta, 0))
-    	strategy.exit("exit", "entry", loss = 5)
+
+should_calc = (time > testing_start_date) 
+buy_signal = ta.crossover(delta,0)
+sell_signal = ta.crossunder(delta,0)
+
+   
+if (buy_signal and should_calc)
+    strategy.entry("entry", strategy.long, comment="to the moon!/^")
+if (sell_signal and should_calc) 
+    strategy.exit("exit", "entry", loss = 5)
