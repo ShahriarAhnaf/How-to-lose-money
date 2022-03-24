@@ -1,5 +1,5 @@
 //@version=5
-strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=1000, default_qty_type=strategy.percent_of_equity, default_qty_value=80)
+strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=5000, default_qty_type=strategy.percent_of_equity, default_qty_value=80)
 
 ma(source, length, type) =>
     switch type
@@ -8,9 +8,9 @@ ma(source, length, type) =>
         "SMMA (RMA)" => ta.rma(source, length)
 
 
-fastLength = input(11)
-slowLength = input(14)
-MACDLength = input(9)
+fastLength = input(5)
+slowLength = input(100)
+MACDLength = input(10)
 
 //bootlegging the rsi CODE!
 
@@ -56,7 +56,7 @@ plot(signalLine, color = color.blue)
 plot(macdLine, color = color.orange)
 
 // the actual emas for analysis from the graphs!
-plot(fastEMA, title="FAST EMA", color=color.pink)
+plot(fastEMA, title="FAST EMA", color=color.blue)
 plot(slowEMA, title="SLOW EMA", color=color.orange)
 
 plot(delta, color = delta >= 0 ? color.yellow : color.purple)
@@ -64,6 +64,6 @@ plot(rsiMA, offset=rsiOffset, color = rsiMA >= 50 ? color.red : color.green)
     
 if (time > testing_start_date)    
     if (ta.crossover(delta, 0))
-    	strategy.entry("MacdLE", strategy.long, comment="to the moon!/^")
+    	strategy.entry("entry", strategy.long, comment="to the moon!/^")
     if (ta.crossunder(delta, 0))
-    	strategy.entry("MacdSE", strategy.short, comment="le sell ?!")
+    	strategy.exit("exit", "entry", loss = 5)
