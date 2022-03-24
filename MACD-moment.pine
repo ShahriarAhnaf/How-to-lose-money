@@ -1,5 +1,5 @@
 //@version=5
-strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=5000, default_qty_type=strategy.percent_of_equity, default_qty_value=80, pyramiding=2)
+strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=5000, default_qty_type=strategy.percent_of_equity, default_qty_value=80)
 
 ma(source, length, type) =>
     switch type
@@ -35,7 +35,7 @@ leRSI_buy_or_sell = 0.000
 // check for either oversold or not
 // higher than overbought will result in negative to drive sell behaviour
 // lower than oversold will result in positive to drive buy behaviour
-if rsiMA >= rsiOverbought/100 or rsiMA <= rsiOversold/100
+if rsiMA >= rsiOverbought or rsiMA <= rsiOversold
     leRSI_buy_or_sell := rsiMA >= 50 ? (rsiOverbought/100) - (rsiMA/100)  : (rsiOversold/100) - (rsiMA/100) 
 
 
