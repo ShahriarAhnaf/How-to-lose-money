@@ -1,5 +1,5 @@
 //@version=5
-strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=5000, default_qty_type=strategy.percent_of_equity, default_qty_value=80)
+strategy("Ahnaf's MACD Strategy", overlay=true, currency= currency.USD, initial_capital=5000, default_qty_type=strategy.percent_of_equity, default_qty_value=80, pyramiding=2)
 
 ma(source, length, type) =>
     switch type
@@ -56,8 +56,8 @@ plot(signalLine, color = color.blue)
 plot(macdLine, color = color.orange)
 
 // the actual emas for analysis from the graphs!
-plot(fastEMA, title="FAST EMA", color=color.blue)
-plot(slowEMA, title="SLOW EMA", color=color.orange)
+//plot(fastEMA, title="FAST EMA", color=color.blue)
+//plot(slowEMA, title="SLOW EMA", color=color.orange)
 
 plot(delta, color = delta >= 0 ? color.yellow : color.purple)
 plot(rsiMA, offset=rsiOffset, color = rsiMA >= 50 ? color.red : color.green)
@@ -70,4 +70,4 @@ sell_signal = ta.crossunder(delta,0)
 if (buy_signal and should_calc)
     strategy.entry("entry", strategy.long, comment="to the moon!/^")
 if (sell_signal and should_calc) 
-    strategy.exit("exit", "entry", loss = 5)
+    strategy.close("entry")
