@@ -7,6 +7,21 @@ ma(source, length, type) =>
         "EMA" => ta.ema(source, length)
         "SMMA (RMA)" => ta.rma(source, length)
 
+userLen = input(defval=100, type=input.integer, title='User length', minval=0)
+
+//  cashVec is the price going up or down
+
+cashVec = close - open
+
+//  cashMag will take the average price between high and low and multiple by the current volume, value is negative when price is going down.
+
+cashMag = cashVec > 0? volume * ((high + low) / 2): cashVec < 0? -1 * (volume * ((high + low) / 2)): na
+
+//  cashSum takes the sum of the cashMag values based on user input length (the moving average of the market)
+
+cashSum = sum(cashMag, userLen)
+
+//  This plotting makes the indicator look pretty. Can be customized here or in the front panel.
 
 fastLength = input(5)
 slowLength = input(100)
