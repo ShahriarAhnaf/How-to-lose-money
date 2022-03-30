@@ -54,7 +54,11 @@ if rsiMA >= rsiOverbought or rsiMA <= rsiOversold
     leRSI_buy_or_sell := rsiMA >= 50 ? (rsiOverbought/100) - (rsiMA/100)  : (rsiOversold/100) - (rsiMA/100) 
 
 
-
+// check cash sum
+if cashSum > 0 
+    cashIndicator = 1
+else 
+    cashIndicator = -1
 
 testing_start_date = input.time(title="Date", defval=timestamp("20 January 2022 00:00 +0300"))
 fastEMA = ta.ema(close, fastLength)
