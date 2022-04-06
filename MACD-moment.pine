@@ -7,26 +7,12 @@ ma(source, length, type) =>
         "EMA" => ta.ema(source, length)
         "SMMA (RMA)" => ta.rma(source, length)
 
-userLen = input(defval=100, type=input.integer, title='User length', minval=0)
-
-//  cashVec is the price going up or down
-
-cashVec = close - open
-
-//  cashMag will take the average price between high and low and multiple by the current volume, value is negative when price is going down.
-
-cashMag = cashVec > 0? volume * ((high + low) / 2): cashVec < 0? -1 * (volume * ((high + low) / 2)): na
-
-//  cashSum takes the sum of the cashMag values based on user input length (the moving average of the market)
-
-cashSum = sum(cashMag, userLen)
-
-//  This plotting makes the indicator look pretty. Can be customized here or in the front panel.
 
 fastLength = input(5)
 slowLength = input(100)
 MACDLength = input(10)
-
+sensitivity = input(0.1)
+StopLoss = input.int(5, minval=0, title="Stop Loss(%)")
 //bootlegging the rsi CODE!
 
 rsiLengthInput = input.int(14, minval=1, title="RSI Length", group="RSI Settings")
@@ -54,11 +40,7 @@ if rsiMA >= rsiOverbought or rsiMA <= rsiOversold
     leRSI_buy_or_sell := rsiMA >= 50 ? (rsiOverbought/100) - (rsiMA/100)  : (rsiOversold/100) - (rsiMA/100) 
 
 
-// check cash sum
-if cashSum > 0 
-    cashIndicator = 1
-else 
-    cashIndicator = -1
+
 
 testing_start_date = input.time(title="Date", defval=timestamp("20 January 2022 00:00 +0300"))
 fastEMA = ta.ema(close, fastLength)
@@ -75,18 +57,24 @@ plot(signalLine, color = color.blue)
 plot(macdLine, color = color.orange)
 
 // the actual emas for analysis from the graphs!
-//plot(fastEMA, title="FAST EMA", color=color.blue)
-//plot(slowEMA, title="SLOW EMA", color=color.orange)
+plot(fastEMA, title="FAST EMA", color=color.blue)
+plot(slowEMA, title="SLOW EMA", color=color.orange)
 
 plot(delta, color = delta >= 0 ? color.yellow : color.purple)
 plot(rsiMA, offset=rsiOffset, color = rsiMA >= 50 ? color.red : color.green)
 
 should_calc = (time > testing_start_date) 
-buy_signal = ta.crossover(delta,0)
-sell_signal = ta.crossunder(delta,0)
+buy_signal = ta.crossover(delta,0+sensitivity)
+sell_signal = ta.crossunder(delta,0-sensitivity)
+//stop loss features
+price = 0.000
+stopLossIndicator = false
 
-   
+// buying and selling strats
 if (buy_signal and should_calc)
     strategy.entry("entry", strategy.long, comment="to the moon!/^")
-if (sell_signal and should_calc) 
+    price := strategy.opentrades.entry_price(0)
+if(price != 0)
+    stopLossIndicator := ((price - close) > (price * (StopLoss/100))) ? true : false
+if ((sell_signal and should_calc) or stopLossIndicator) 
     strategy.close("entry")
