@@ -12,7 +12,7 @@ fastLength = input(5)
 slowLength = input(100)
 MACDLength = input(10)
 sensitivity = input(0.1)
-StopLoss = input.int(5, minval=0, title="Stop Loss(%)")
+StopLoss = input.float(5.00, minval=0, title="Stop Loss(%)")
 //bootlegging the rsi CODE!
 
 rsiLengthInput = input.int(14, minval=1, title="RSI Length", group="RSI Settings")
@@ -67,14 +67,14 @@ should_calc = (time > testing_start_date)
 buy_signal = ta.crossover(delta,0+sensitivity)
 sell_signal = ta.crossunder(delta,0-sensitivity)
 //stop loss features
-price = 0.000
 stopLossIndicator = false
 
 // buying and selling strats
 if (buy_signal and should_calc)
     strategy.entry("entry", strategy.long, comment="to the moon!/^")
-    price := strategy.opentrades.entry_price(0)
-if(price != 0)
+    price = strategy.opentrades.entry_price(0)
     stopLossIndicator := ((price - close) > (price * (StopLoss/100))) ? true : false
+    
+
 if ((sell_signal and should_calc) or stopLossIndicator) 
     strategy.close("entry")
